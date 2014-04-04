@@ -35,13 +35,13 @@ TooltipSpy:
 			{	WinGetPos,WinX,WinY,WinW,WinH,ahk_id %WinID%
 				WinGetTitle,WinTitle,ahk_id %WinID%
 				WinGet,WinCount,Count,ahk_class %WinClass%
-				WinInfo:="WINDOW`n  (e) X,Y:`t`t" WinX "," WinY "`n  (f) H x W:`t" WinH " x " WinW "`n  (g) Title:`t" SubStr(WinTitle,1,TextLen) "`n  (r) Class:`t" SubStr(WinClass,1,TextLen) "`n  (s) ID:`t`t" SubStr(WinID,1,TextLen) "`n  (t) Count:`t" SubStr(WinCount,1,TextLen) "`n"
+				WinInfo:="WINDOW`n  (e) X,Y:`t" WinX "," WinY "`n  (f) H x W:`t" WinH " x " WinW "`n  (g) Title:`t" SubStr(WinTitle,1,TextLen) "`n  (r) Class:`t" SubStr(WinClass,1,TextLen) "`n  (s) ID:`t`t" SubStr(WinID,1,TextLen) "`n  (t) Count:`t" SubStr(WinCount,1,TextLen) "`n"
 				SetFormat,IntegerFast,H
 				MouseGetPos,m_x,m_y
 				MouseGetPos,,,,CClassNN,1
 				MouseGetPos,,,,CHwnd,2
 				MouseGetPos,,,,CHybrid,3
-				CInfo:="C`n  (v) ClassNN:`t" SubStr(CClassNN,1,TextLen) "`n  (w) HWND:`t" SubStr(CHwnd,1,TextLen) "`n  (x) Hybrid:`t" SubStr(CHybrid,1,TextLen) "`n  (z) HWND_DLL:`t" SubStr(CHwndDll:=DllCall("WindowFromPoint","int64",(m_y<<32)|(m_x&0xFFFFFFFF),"Ptr"),1,TextLen) "`n"
+				CInfo:="Control`n  (v) ClassNN:`t" SubStr(CClassNN,1,TextLen) "`n  (w) HWND:`t" SubStr(CHwnd,1,TextLen) "`n  (x) Hybrid:`t" SubStr(CHybrid,1,TextLen) "`n  (z) HWND_DLL:`t" SubStr(CHwndDll:=DllCall("WindowFromPoint","int64",(m_y<<32)|(m_x&0xFFFFFFFF),"Ptr"),1,TextLen) "`n"
 			}ToolTip,% (MouseInfo (Sep:="--------------------------------------`n") WinInfo Sep CInfo Sep (TooltipHeader:="Esc = Exit`nAlt = Copy everything`nTab = Toggle full/short view`n"),PriorX:=MPosSX,PriorY:=MPosSY,PriorFull:=Full)
 	}}else
 	{	SetTimer,TooltipSpy,Off
