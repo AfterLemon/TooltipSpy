@@ -50,7 +50,7 @@ TooltipSpy:
 			{	WinGetPos,WinX,WinY,WinW,WinH,ahk_id %WinID%
 				WinGetTitle,WinTitle,ahk_id %WinID%
 				WinGet,WinCount,Count,ahk_class %WinClass%
-				WinInfo:="WINDOW`n  (e) X,Y:`t" WinX "," WinY "`n  (f) H x W:`t" WinH " x " WinW "`n  (g) Title:`t" SubStr(WinTitle,1,TextLen) "`n  (r) Class:`t" SubStr(WinClass,1,TextLen) "`n  (s) ID:`t`t" SubStr(WinID,1,TextLen) "`n  (t) Count:`t" SubStr(WinCount,1,TextLen) "`n"
+				WinInfo:="WINDOW`n  (e) X,Y:`t`t" WinX "," WinY "`n  (f) H x W:`t" WinH " x " WinW "`n  (g) Title:`t" SubStr(WinTitle,1,TextLen) "`n  (r) Class:`t" SubStr(WinClass,1,TextLen) "`n  (s) ID:`t`t" SubStr(WinID,1,TextLen) "`n  (t) Count:`t" SubStr(WinCount,1,TextLen) "`n"
 				SetFormat,IntegerFast,H
 				MouseGetPos,m_x,m_y
 				MouseGetPos,,,,CClassNN,1
