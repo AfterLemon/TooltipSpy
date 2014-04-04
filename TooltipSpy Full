@@ -1,0 +1,64 @@
+RButton & Esc::SetTimer,TooltipSpy,% (20,Full:=0,SpyActive:=1)
+RButton::RButton
+
+#If SpyActive
+	a::TooltipCopy(MPosSX "," MPosSY)
+	b::TooltipCopy(MPosWX "," MPosWY)
+	c::TooltipCopy(ColorHex)
+	d::TooltipCopy("R=" ColorRed ",G=" ColorGreen ",B=" ColorBlue)
+	e::TooltipCopy(WinX "," WinY)
+	f::TooltipCopy(WinH " x " WinW)
+	g::TooltipCopy(WinTitle)
+	r::TooltipCopy(WinClass)
+	s::TooltipCopy(WinID)
+	t::TooltipCopy(WinCount)
+	v::TooltipCopy(CClassNN)
+	w::TooltipCopy(CHwnd)
+	x::TooltipCopy(CHybrid)
+	z::TooltipCopy(CHwndDll)
+	LAlt::TooltipCopy(MouseInfo WinInfo CInfo)
+	Tab::Full:=!Full
+	Esc::ToolTip,,,,% (20,SpyActive:=0)
+#If
+
+TooltipCopy(Data)
+{	global MPosSX,MPosSY
+	static D,PPosX,PPosY
+	SetTimer,TipUpdate,% (20,D:=Data,Clipboard:=Data)
+	SetTimer,ToolTip,-2000
+	TipUpdate:
+		If !(PPosY=MPosSY&&PPosY=MPosSY)
+			ToolTip,% D " Copied",% (MPosSX+24,PPosX:=MPosSX),% (MPosSY,PPosY:=MPosSY),20
+	return
+	ToolTip:
+		SetTimer,TipUpdate,Off
+		ToolTip,,,,20
+	return
+}
+
+TooltipSpy:
+	If SpyActive
+	{	CoordMode,Mouse
+		MouseGetPos,MPosSX,MPosSY,WinID
+		If !(PriorX=MPosSX&&PriorY=MPosSY&&PriorFull=Full,TextLen:=(Full?100:15))
+		{	CoordMode,Mouse,Window
+			MouseGetPos,MPosWX,MPosWY
+			CoordMode,Pixel
+			PixelGetColor,ColorHex,%MPosSX%,%MPosSY%,RGB
+			WinGetClass,WinClass,ahk_id %WinID%
+			If(WinClass!="tooltips_class32",ColorRed:=((ColorHex&0xFF0000)>>16),ColorGreen:=((ColorHex&0x00FF00)>>8),ColorBlue:=ColorHex&0x0000FF,MouseInfo:="MOUSE`n  (a) Screen (x,y):`t" MPosSX "," MPosSY "`n  (b) Win. (x,y):`t" MPosWX "," MPosWY "`n  (c) RGB Hex:`t" ColorHex "`n  (d) RGB Dec:`t" ColorRed "," ColorGreen "," ColorBlue "`n")
+			{	WinGetPos,WinX,WinY,WinW,WinH,ahk_id %WinID%
+				WinGetTitle,WinTitle,ahk_id %WinID%
+				WinGet,WinCount,Count,ahk_class %WinClass%
+				WinInfo:="WINDOW`n  (e) X,Y:`t`t" WinX "," WinY "`n  (f) H x W:`t" WinH " x " WinW "`n  (g) Title:`t" SubStr(WinTitle,1,TextLen) "`n  (r) Class:`t" SubStr(WinClass,1,TextLen) "`n  (s) ID:`t`t" SubStr(WinID,1,TextLen) "`n  (t) Count:`t" SubStr(WinCount,1,TextLen) "`n"
+				SetFormat,IntegerFast,H
+				MouseGetPos,m_x,m_y
+				MouseGetPos,,,,CClassNN,1
+				MouseGetPos,,,,CHwnd,2
+				MouseGetPos,,,,CHybrid,3
+				CInfo:="C`n  (v) ClassNN:`t" SubStr(CClassNN,1,TextLen) "`n  (w) HWND:`t" SubStr(CHwnd,1,TextLen) "`n  (x) Hybrid:`t" SubStr(CHybrid,1,TextLen) "`n  (z) HWND_DLL:`t" SubStr(CHwndDll:=DllCall("WindowFromPoint","int64",(m_y<<32)|(m_x&0xFFFFFFFF),"Ptr"),1,TextLen) "`n"
+			}ToolTip,% (MouseInfo (Sep:="--------------------------------------`n") WinInfo Sep CInfo Sep (TooltipHeader:="Esc = Exit`nAlt = Copy everything`nTab = Toggle full/short view`n"),PriorX:=MPosSX,PriorY:=MPosSY,PriorFull:=Full)
+	}}else
+	{	SetTimer,TooltipSpy,Off
+		ToolTip
+}return
