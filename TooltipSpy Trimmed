@@ -1,5 +1,13 @@
-RButton & Esc::SetTimer,TooltipSpy,% (20,Full:=0,SpyActive:=1)
-RButton::RButton
+RButton::
+	Send,{RButton Down}
+	While GetKeyState("RButton","P")
+	{	If GetKeyState("Esc","P")
+		{	SetTimer,TooltipSpy,% (20,Full:=0,SpyActive:=1)
+			break
+	}}Send,{RButton Up}
+	If SpyActive
+		Send,{Escape}
+return
 
 #If SpyActive
 	a::Clipboard:=MPosSX "," MPosSY
@@ -18,7 +26,7 @@ RButton::RButton
 	z::Clipboard:=CHwndDll
 	LAlt::Clipboard:=MouseInfo WinInfo CInfo
 	Tab::Full:=!Full
-	Esc::SpyActive:=0
+	$Esc::SpyActive:=0
 #If
 
 TooltipSpy:
